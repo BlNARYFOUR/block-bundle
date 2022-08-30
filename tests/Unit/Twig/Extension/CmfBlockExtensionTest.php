@@ -13,6 +13,9 @@ namespace Symfony\Cmf\Bundle\BlockBundle\Tests\Unit\Twig\Extension;
 
 use Symfony\Cmf\Bundle\BlockBundle\Templating\Helper\CmfBlockHelper;
 use Symfony\Cmf\Bundle\BlockBundle\Twig\Extension\CmfBlockExtension;
+use Throwable;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 
 class CmfBlockExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,10 +30,11 @@ class CmfBlockExtensionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getEmbedFilterData
+     * @throws Throwable
      */
     public function testEmbedFilter($template, $calls = 1)
     {
-        $twig = new \Twig_Environment(new \Twig_Loader_Array([]), ['debug' => true, 'cache' => false, 'autoescape' => 'html', 'optimizations' => 0]);
+        $twig = new Environment(new ArrayLoader([]), ['debug' => true, 'cache' => false, 'autoescape' => 'html', 'optimizations' => 0]);
         $twig->addExtension(new CmfBlockExtension($this->getBlockHelper()));
 
         $this->getBlockHelper()->expects($this->exactly($calls))
@@ -38,7 +42,7 @@ class CmfBlockExtensionTest extends \PHPUnit_Framework_TestCase
 
         try {
             $twig->createTemplate($template)->render([]);
-        } catch (\Twig_Error_Runtime $e) {
+        } catch (\Twig\Error\RuntimeError $e) {
             throw $e->getPrevious();
         }
     }

@@ -12,13 +12,15 @@
 namespace Symfony\Cmf\Bundle\BlockBundle\Twig\Extension;
 
 use Symfony\Cmf\Bundle\BlockBundle\Templating\Helper\CmfBlockHelper;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
 /**
  * Utility function for blocks.
  *
  * @author David Buchmann <david@liip.ch>
  */
-class CmfBlockExtension extends \Twig_Extension
+class CmfBlockExtension extends AbstractExtension
 {
     protected $blockHelper;
 
@@ -30,7 +32,7 @@ class CmfBlockExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            new \Twig_SimpleFilter(
+            new TwigFilter(
                 'cmf_embed_blocks',
                 [$this->blockHelper, 'embedBlocks'],
                 ['is_safe' => ['html']]

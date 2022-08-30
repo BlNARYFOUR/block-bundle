@@ -11,14 +11,14 @@
 
 namespace Symfony\Cmf\Bundle\BlockBundle\Tests\Fixtures\App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author Nicolas Bastien <nbastien@prestaconcept.net>
  */
-class TestController extends Controller
+class TestController extends AbstractController
 {
     /**
      * @param Request $request

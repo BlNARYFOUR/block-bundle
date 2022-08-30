@@ -15,10 +15,10 @@ use Knp\Menu\NodeInterface;
 use Sonata\BlockBundle\Block\BlockContext;
 use Sonata\BlockBundle\Block\BlockContextManagerInterface;
 use Sonata\BlockBundle\Block\BlockRendererInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Cmf\Bundle\BlockBundle\Block\MenuBlockService;
 use Symfony\Cmf\Bundle\BlockBundle\Doctrine\Phpcr\MenuBlock;
 use Symfony\Cmf\Bundle\MenuBundle\Doctrine\Phpcr\MenuNode;
+use Twig\Environment;
 
 class MenuBlockServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,7 +27,7 @@ class MenuBlockServiceTest extends \PHPUnit_Framework_TestCase
         $menuBlock = new MenuBlock();
         $menuBlock->setEnabled(false);
 
-        $templatingMock = $this->createMock(EngineInterface::class);
+        $templatingMock = $this->createMock(Environment::class);
 
         $blockRendererMock = $this->createMock(BlockRendererInterface::class);
         $blockRendererMock->expects($this->never())->method('render');
@@ -49,7 +49,7 @@ class MenuBlockServiceTest extends \PHPUnit_Framework_TestCase
 
         $menuBlockContext = new BlockContext($menuBlock, ['template' => $template]);
 
-        $templatingMock = $this->createMock(EngineInterface::class);
+        $templatingMock = $this->createMock(Environment::class);
 
         $blockRendererMock = $this->createMock(BlockRendererInterface::class);
 

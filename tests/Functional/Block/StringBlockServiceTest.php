@@ -12,9 +12,9 @@
 namespace Symfony\Cmf\Bundle\BlockBundle\Tests\Functional\Block;
 
 use Sonata\BlockBundle\Block\BlockContext;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Cmf\Bundle\BlockBundle\Block\StringBlockService;
 use Symfony\Cmf\Bundle\BlockBundle\Doctrine\Phpcr\StringBlock;
+use Twig\Environment;
 
 class StringBlockServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +25,7 @@ class StringBlockServiceTest extends \PHPUnit_Framework_TestCase
         $stringBlock->setEnabled(true);
         $blockContext = new BlockContext($stringBlock, ['template' => $template]);
 
-        $templatingMock = $this->createMock(EngineInterface::class);
+        $templatingMock = $this->createMock(Environment::class);
         $templatingMock->expects($this->once())
             ->method('renderResponse')
             ->with(
@@ -44,7 +44,7 @@ class StringBlockServiceTest extends \PHPUnit_Framework_TestCase
         $stringBlock = new StringBlock();
         $stringBlock->setEnabled(false);
 
-        $templatingMock = $this->createMock(EngineInterface::class);
+        $templatingMock = $this->createMock(Environment::class);
         $templatingMock->expects($this->never())
              ->method('renderResponse');
 

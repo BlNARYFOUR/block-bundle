@@ -12,9 +12,9 @@
 namespace Symfony\Cmf\Bundle\BlockBundle\Tests\Functional\Block;
 
 use Sonata\BlockBundle\Block\BlockContext;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Cmf\Bundle\BlockBundle\Block\SimpleBlockService;
 use Symfony\Cmf\Bundle\BlockBundle\Doctrine\Phpcr\SimpleBlock;
+use Twig\Environment;
 
 class SimpleBlockServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +25,7 @@ class SimpleBlockServiceTest extends \PHPUnit_Framework_TestCase
         $simpleBlock->setEnabled(true);
         $blockContext = new BlockContext($simpleBlock, ['template' => $template]);
 
-        $templatingMock = $this->createMock(EngineInterface::class);
+        $templatingMock = $this->createMock(Environment::class);
         $templatingMock->expects($this->once())
             ->method('renderResponse')
             ->with(
@@ -44,7 +44,7 @@ class SimpleBlockServiceTest extends \PHPUnit_Framework_TestCase
         $simpleBlock = new SimpleBlock();
         $simpleBlock->setEnabled(false);
 
-        $templatingMock = $this->createMock(EngineInterface::class);
+        $templatingMock = $this->createMock(Environment::class);
         $templatingMock->expects($this->never())
              ->method('renderResponse');
 

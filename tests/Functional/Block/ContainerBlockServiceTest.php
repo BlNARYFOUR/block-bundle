@@ -14,11 +14,11 @@ namespace Symfony\Cmf\Bundle\BlockBundle\Tests\Functional\Block;
 use Doctrine\ODM\PHPCR\ChildrenCollection;
 use Sonata\BlockBundle\Block\BlockContext;
 use Sonata\BlockBundle\Block\BlockRendererInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Cmf\Bundle\BlockBundle\Block\ContainerBlockService;
 use Symfony\Cmf\Bundle\BlockBundle\Doctrine\Phpcr\ContainerBlock;
 use Symfony\Cmf\Bundle\BlockBundle\Doctrine\Phpcr\SimpleBlock;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 class ContainerBlockServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +31,7 @@ class ContainerBlockServiceTest extends \PHPUnit_Framework_TestCase
         $blockRendererMock->expects($this->never())
             ->method('render');
 
-        $templatingMock = $this->createMock(EngineInterface::class);
+        $templatingMock = $this->createMock(Environment::class);
 
         $containerBlockService = new ContainerBlockService('test-service', $templatingMock, $blockRendererMock);
         $containerBlockService->execute(new BlockContext($containerBlock));
@@ -62,7 +62,7 @@ class ContainerBlockServiceTest extends \PHPUnit_Framework_TestCase
 
         $blockRendererMock = $this->createMock(BlockRendererInterface::class);
 
-        $templatingMock = $this->createMock(EngineInterface::class);
+        $templatingMock = $this->createMock(Environment::class);
 
         $templatingMock
             ->expects($this->once())
@@ -100,7 +100,7 @@ class ContainerBlockServiceTest extends \PHPUnit_Framework_TestCase
 
         $blockRendererMock = $this->createMock(BlockRendererInterface::class);
 
-        $templatingMock = $this->createMock(EngineInterface::class);
+        $templatingMock = $this->createMock(Environment::class);
 
         $templatingMock
             ->expects($this->once())

@@ -34,6 +34,7 @@ class ReferenceBlockService extends AbstractBlockService implements BlockService
     public function __construct($name, Environment $templating, BlockRendererInterface $blockRenderer, BlockContextManagerInterface $blockContextManager)
     {
         parent::__construct($templating);
+        $this->name = $name;
         $this->blockRenderer = $blockRenderer;
         $this->blockContextManager = $blockContextManager;
     }
@@ -41,7 +42,7 @@ class ReferenceBlockService extends AbstractBlockService implements BlockService
     /**
      * {@inheritdoc}
      */
-    public function execute(BlockContextInterface $blockContext, Response $response = null)
+    public function execute(BlockContextInterface $blockContext, Response $response = null): ?Response
     {
         if (!$response) {
             $response = new Response();

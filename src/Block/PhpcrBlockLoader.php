@@ -11,7 +11,8 @@
 
 namespace Symfony\Cmf\Bundle\BlockBundle\Block;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectManager;
 use Psr\Log\LoggerInterface;
 use Sonata\BlockBundle\Block\BlockLoaderInterface;
 use Sonata\BlockBundle\Exception\BlockNotFoundException;
@@ -68,13 +69,14 @@ class PhpcrBlockLoader implements BlockLoaderInterface
     protected $emptyBlockType;
 
     /**
-     * @param ManagerRegistry          $managerRegistry
-     * @param SecurityContextInterface $publishWorkflowChecker the publish workflow checker to determine
-     *                                                         whether the menu item is published
-     * @param LoggerInterface          $logger
-     * @param null                     $emptyBlockType         set this to a block type name if you want
-     *                                                         the loader to return empty blocks when no
-     *                                                         block is found
+     * @param ManagerRegistry               $managerRegistry
+     * @param AuthorizationCheckerInterface $publishWorkflowChecker the publish workflow checker to determine
+     *                                                              whether the menu item is published
+     * @param RequestStack                  $requestStack
+     * @param LoggerInterface|null          $logger
+     * @param null                          $emptyBlockType         set this to a block type name if you want
+     *                                                              the loader to return empty blocks when no
+     *                                                              block is found
      */
     public function __construct(
         ManagerRegistry $managerRegistry,
@@ -168,7 +170,7 @@ class PhpcrBlockLoader implements BlockLoaderInterface
                 $this->logger->debug("Block '$name' is not an absolute path and there is no 'contentDocument' in the request attributes");
             }
 
-            return;
+            return null;
         }
 
         $block = $this->getObjectManager()->find(null, $path);
@@ -182,7 +184,7 @@ class PhpcrBlockLoader implements BlockLoaderInterface
                 $this->logger->debug("Block '$name' at path '$path' is not published");
             }
 
-            return;
+            return null;
         }
 
         return $block;
@@ -226,7 +228,7 @@ class PhpcrBlockLoader implements BlockLoaderInterface
             ;
         }
 
-        return;
+        return null;
     }
 
     /**
@@ -279,7 +281,7 @@ class PhpcrBlockLoader implements BlockLoaderInterface
     /**
      * Get the object manager from the registry, based on the current managerName.
      *
-     * @return \Doctrine\Common\Persistence\ObjectManager
+     * @return ObjectManager
      */
     protected function getObjectManager()
     {

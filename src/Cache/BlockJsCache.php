@@ -16,6 +16,7 @@ use Sonata\BlockBundle\Block\BlockLoaderInterface;
 use Sonata\BlockBundle\Block\BlockRendererInterface;
 use Sonata\Cache\CacheAdapterInterface;
 use Sonata\Cache\CacheElement;
+use Sonata\Cache\CacheElementInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
@@ -59,7 +60,7 @@ class BlockJsCache implements CacheAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function flushAll()
+    public function flushAll(): bool
     {
         return true;
     }
@@ -67,7 +68,7 @@ class BlockJsCache implements CacheAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function flush(array $keys = [])
+    public function flush(array $keys = []): bool
     {
         return true;
     }
@@ -75,7 +76,7 @@ class BlockJsCache implements CacheAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function has(array $keys)
+    public function has(array $keys): bool
     {
         return true;
     }
@@ -83,7 +84,7 @@ class BlockJsCache implements CacheAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function get(array $keys)
+    public function get(array $keys): CacheElementInterface
     {
         $this->validateKeys($keys);
 
@@ -185,11 +186,11 @@ CONTENT
     /**
      * {@inheritdoc}
      */
-    public function set(array $keys, $data, $ttl = 84600, array $contextualKeys = [])
+    public function set(array $keys, $value, int $ttl = CacheElement::DAY, array $contextualKeys = []): CacheElementInterface
     {
         $this->validateKeys($keys);
 
-        return new CacheElement($keys, $data, $ttl, $contextualKeys);
+        return new CacheElement($keys, $value, $ttl, $contextualKeys);
     }
 
     /**
@@ -255,7 +256,7 @@ JS
     /**
      * {@inheritdoc}
      */
-    public function isContextual()
+    public function isContextual(): bool
     {
         return false;
     }

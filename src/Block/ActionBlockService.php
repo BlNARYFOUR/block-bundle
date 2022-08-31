@@ -11,6 +11,7 @@
 
 namespace Symfony\Cmf\Bundle\BlockBundle\Block;
 
+use RuntimeException;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService;
 use Twig\Environment;
@@ -33,13 +34,15 @@ class ActionBlockService extends AbstractBlockService
     protected $renderer;
 
     /**
+     * @param RequestStack    $requestStack
      * @param string          $name
-     * @param Environment $templating
+     * @param Environment     $templating
      * @param FragmentHandler $renderer
      */
     public function __construct(RequestStack $requestStack, $name, Environment $templating, FragmentHandler $renderer)
     {
-        parent::__construct($name, $templating);
+        parent::__construct($templating);
+        $this->name = $name;
         $this->renderer = $renderer;
         $this->requestStack = $requestStack;
     }
@@ -47,13 +50,13 @@ class ActionBlockService extends AbstractBlockService
     /**
      * {@inheritdoc}
      */
-    public function execute(BlockContextInterface $blockContext, Response $response = null)
+    public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         /** @var $block ActionBlock */
         $block = $blockContext->getBlock();
 
         if (!$block->getActionName()) {
-            throw new \RuntimeException(sprintf(
+            throw new RuntimeException(sprintf(
                 'ActionBlock with id "%s" does not have an action name defined, implement a default or persist it in the document.',
                 $block->getId()
             ));

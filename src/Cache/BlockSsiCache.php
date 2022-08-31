@@ -15,9 +15,12 @@ use Sonata\BlockBundle\Block\BlockContextManagerInterface;
 use Sonata\BlockBundle\Block\BlockLoaderInterface;
 use Sonata\BlockBundle\Block\BlockRendererInterface;
 use Sonata\Cache\CacheElement;
+use Sonata\Cache\CacheElementInterface;
 use Sonata\CacheBundle\Adapter\SsiCache;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface;
+use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
@@ -45,9 +48,11 @@ class BlockSsiCache extends SsiCache
         RouterInterface $router,
         BlockRendererInterface $blockRenderer,
         BlockLoaderInterface $blockLoader,
-        BlockContextManagerInterface $blockContextManager
+        BlockContextManagerInterface $blockContextManager,
+        ControllerResolverInterface $resolver = null,
+        ArgumentResolverInterface $argumentResolver = null
     ) {
-        parent::__construct($token, $router, null);
+        parent::__construct($token, $router, $resolver, $argumentResolver);
 
         $this->blockRenderer = $blockRenderer;
         $this->blockLoader = $blockLoader;
@@ -71,7 +76,7 @@ class BlockSsiCache extends SsiCache
     /**
      * {@inheritdoc}
      */
-    public function get(array $keys)
+    public function get(array $keys): CacheElementInterface
     {
         $this->validateKeys($keys);
 
@@ -85,7 +90,7 @@ class BlockSsiCache extends SsiCache
     /**
      * {@inheritdoc}
      */
-    public function set(array $keys, $data, $ttl = 84600, array $contextualKeys = [])
+    public function set(array $keys, $data, $ttl = 84600, array $contextualKeys = []): CacheElementInterface
     {
         $this->validateKeys($keys);
 
@@ -97,7 +102,7 @@ class BlockSsiCache extends SsiCache
      *
      * @return string
      */
-    protected function computeHash(array $keys)
+    protected function computeHash(array $keys): string
     {
         // values are casted into string for non numeric id
         return hash('sha256', $this->token.serialize([

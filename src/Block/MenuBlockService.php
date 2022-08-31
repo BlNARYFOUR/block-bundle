@@ -16,6 +16,7 @@ use Sonata\BlockBundle\Block\Service\AbstractBlockService;
 use Sonata\BlockBundle\Block\Service\BlockServiceInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * The menu block service renders the template with the specified menu node.
@@ -38,7 +39,7 @@ class MenuBlockService extends AbstractBlockService implements BlockServiceInter
     /**
      * {@inheritdoc}
      */
-    public function execute(BlockContextInterface $blockContext, Response $response = null)
+    public function execute(BlockContextInterface $blockContext, Response $response = null): ?Response
     {
         $block = $blockContext->getBlock();
 
@@ -62,7 +63,7 @@ class MenuBlockService extends AbstractBlockService implements BlockServiceInter
     /**
      * {@inheritdoc}
      */
-    public function setDefaultSettings(OptionsResolver $resolver)
+    public function setDefaultSettings(OptionsResolverInterface $resolver)
     {
         $this->configureSettings($resolver);
     }

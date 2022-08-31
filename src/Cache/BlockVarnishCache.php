@@ -15,10 +15,13 @@ use Sonata\BlockBundle\Block\BlockContextManagerInterface;
 use Sonata\BlockBundle\Block\BlockLoaderInterface;
 use Sonata\BlockBundle\Block\BlockRendererInterface;
 use Sonata\Cache\CacheElement;
+use Sonata\Cache\CacheElementInterface;
 use Sonata\CacheBundle\Adapter\VarnishCache;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
+use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
@@ -69,9 +72,11 @@ class BlockVarnishCache extends VarnishCache
         BlockContextManagerInterface $blockContextManager,
         FragmentHandler $fragmentHandler,
         array $servers,
-        $purgeInstruction
+        $purgeInstruction,
+        ControllerResolverInterface $resolver = null,
+        ArgumentResolverInterface $argumentResolver = null
     ) {
-        parent::__construct($token, $servers, $router, $purgeInstruction, null);
+        parent::__construct($token, $servers, $router, $purgeInstruction, $resolver, $argumentResolver);
 
         $this->blockRenderer = $blockRenderer;
         $this->blockLoader = $blockLoader;
@@ -96,7 +101,7 @@ class BlockVarnishCache extends VarnishCache
     /**
      * {@inheritdoc}
      */
-    public function get(array $keys)
+    public function get(array $keys): CacheElementInterface
     {
         $this->validateKeys($keys);
 
@@ -112,7 +117,7 @@ class BlockVarnishCache extends VarnishCache
     /**
      * {@inheritdoc}
      */
-    public function set(array $keys, $data, $ttl = 84600, array $contextualKeys = [])
+    public function set(array $keys, $data, $ttl = 84600, array $contextualKeys = []): CacheElementInterface
     {
         $this->validateKeys($keys);
 
@@ -124,7 +129,7 @@ class BlockVarnishCache extends VarnishCache
      *
      * @return string
      */
-    protected function computeHash(array $keys)
+    protected function computeHash(array $keys): string
     {
         // values are casted into string for non numeric id
         return hash('sha256', $this->token.serialize([

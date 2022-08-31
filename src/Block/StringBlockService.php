@@ -16,6 +16,7 @@ use Sonata\BlockBundle\Block\Service\AbstractBlockService;
 use Sonata\BlockBundle\Block\Service\BlockServiceInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class StringBlockService extends AbstractBlockService implements BlockServiceInterface
 {
@@ -33,7 +34,7 @@ class StringBlockService extends AbstractBlockService implements BlockServiceInt
     /**
      * {@inheritdoc}
      */
-    public function execute(BlockContextInterface $blockContext, Response $response = null)
+    public function execute(BlockContextInterface $blockContext, Response $response = null): ?Response
     {
         if (!$response) {
             $response = new Response();
@@ -49,7 +50,7 @@ class StringBlockService extends AbstractBlockService implements BlockServiceInt
     /**
      * {@inheritdoc}
      */
-    public function setDefaultSettings(OptionsResolver $resolver)
+    public function setDefaultSettings(OptionsResolverInterface $resolver)
     {
         $this->configureSettings($resolver);
     }
